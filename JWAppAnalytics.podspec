@@ -78,7 +78,7 @@ Pod::Spec.new do |spec|
 
   # spec.source       = { :git => "http://EXAMPLE/JWAppAnalytics.git", :tag => "#{spec.version}" }
   # spec.source       = { :path => '.' }
-  # spec.source       = { :git => "https://github.com/JillevdW/JWAppAnalytics.git", :tag => "#{spec.version}" }
+  spec.source       = { :git => "https://github.com/JillevdW/JWAppAnalytics.git", :tag => "#{spec.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
