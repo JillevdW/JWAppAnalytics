@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "JWAppAnalytics"
-  spec.version      = "0.0.1"
+  spec.version      = "0.1.0"
   spec.summary      = "Part of a package of plugins that allows for self-hosted app analytics."
 
   # This description is used to generate tags and improve search results.
