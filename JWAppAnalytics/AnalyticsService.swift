@@ -59,6 +59,7 @@ public class AnalyticsService {
     
     public func willEnterForeground() {
         userJourney?.events = [[String: Any]]()
+        addToUserJourney(event: "open_app")
     }
     
     public func didEnterBackground() {
