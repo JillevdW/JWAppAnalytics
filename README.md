@@ -7,7 +7,7 @@ This package is part of a group that, when installed together, will allow for ea
 Add the following line to your `Podfile`:
 
 ```ruby
-pod 'JWAppAnalytics', :git => 'https://github.com/JillevdW/JWAppAnalytics.git', :tag=> '0.2.0'
+pod 'JWAppAnalytics', :git => 'https://github.com/JillevdW/JWAppAnalytics.git', :tag=> '0.2.1'
 ```
 
 The pod should now be installed the next time you run `pod install` in the root directory of your project.
