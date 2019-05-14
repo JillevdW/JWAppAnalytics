@@ -63,6 +63,7 @@ public class AnalyticsService {
     
     public func didEnterBackground() {
         guard let userJourney = userJourney else { return }
+        addToUserJourney(event: "close_app")
         send(userJourney: userJourney)
     }
     
