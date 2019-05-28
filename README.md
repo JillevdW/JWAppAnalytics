@@ -7,7 +7,7 @@ This package is part of a group that, when installed together, will allow for ea
 Add the following line to your `Podfile`:
 
 ```ruby
-pod 'JWAppAnalytics', :git => 'https://github.com/JillevdW/JWAppAnalytics.git', :tag=> '0.2.1'
+pod 'JWAppAnalytics', :git => 'https://github.com/JillevdW/JWAppAnalytics.git', :tag=> '0.2.2'
 ```
 
 The pod should now be installed the next time you run `pod install` in the root directory of your project.
@@ -35,12 +35,12 @@ You'll also need to add the following code inside your `AppDelegate` class:
 
 ```swift
 func applicationDidEnterBackground(_ application: UIApplication) {
-        AnalyticsService.shared.didEnterBackground()
-        // other code
-    }
+    AnalyticsService.shared.didEnterBackground()
+    // other code
+}
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        AnalyticsService.shared.willEnterForeground()
-        // other code
-    }
+func applicationWillEnterForeground(_ application: UIApplication) {
+    AnalyticsService.shared.willEnterForeground()
+    // other code
+}
 ```
