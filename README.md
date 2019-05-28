@@ -1,4 +1,4 @@
-This package is part of a group that, when installed together, will allow for easy self-hosted mobile app analytics. Without a backend counterpart, this package doesn't do anything.
+This package is part of a group that, when installed together, will allow for easy self-hosted mobile app analytics. Without a [backend counterpart](https://github.com/JillevdW/app-analytics), this package doesn't do anything.
 
 
 
