@@ -26,8 +26,6 @@ public class AnalyticsService {
         "os_version": UIDevice.current.systemVersion
     ]
     
-    private var eventProperties = [String: Any]()
-    
     public func setup(withUrl url: String, userJourneyEnabled: Bool = false) {
         apiUrl = "\(url)/app-analytics-api"
         if UserDefaults.standard.string(forKey: "uuid") == nil {
@@ -39,7 +37,6 @@ public class AnalyticsService {
                 userJourney = UserJourney(uuid: uuid, events: [[String: Any]]())
             }
         }
-        eventProperties = defaultProperties
         sessionProperties = defaultProperties
     }
     
@@ -49,9 +46,12 @@ public class AnalyticsService {
         var request = URLRequest(url: url)
         let uuid = UserDefaults.standard.string(forKey: "uuid")!
         
-        let _properties = eventProperties.merging(properties) { (i1, i2) -> Any in
-            return i2
-        }
+        // If the user added properties to this event, adds the defaults too.
+        let _properties = properties.count == 0
+            ? properties
+            : defaultProperties.merging(properties, uniquingKeysWith: { (i1, i2) -> Any in
+                return i2
+            })
         
         let json: [String: Any] = [
             "device_id": uuid,
@@ -97,13 +97,6 @@ public class AnalyticsService {
     /// Clears the session properties.
     public func clearSessionProperties() {
         sessionProperties = defaultProperties
-    }
-    
-    /// Adds the given properties to the session.
-    public func addDefaultEventProperties(properties: [String: Any]) {
-        eventProperties = eventProperties.merging(properties) { (i1, i2) -> Any in
-            return i2
-        }
     }
     
     private func addToUserJourney(event: String) {
