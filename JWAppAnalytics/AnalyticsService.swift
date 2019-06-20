@@ -152,5 +152,6 @@ fileprivate func modelIdentifier() -> String {
     }
     var sysinfo = utsname()
     uname(&sysinfo)
-    return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+    let string = String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)
+    return string?.trimmingCharacters(in: .controlCharacters) ?? "-"
 }
