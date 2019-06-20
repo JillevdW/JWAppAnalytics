@@ -20,7 +20,7 @@ public class AnalyticsService {
     
     private var sessionProperties = [String: Any]()
     
-    private var defaultProperties: [String: Any] = [
+    private let defaultProperties: [String: Any] = [
         "locale": Locale.current.identifier,
         "device": modelIdentifier(),
         "os_version": UIDevice.current.systemVersion
