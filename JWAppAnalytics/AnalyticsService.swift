@@ -20,6 +20,12 @@ public class AnalyticsService {
     
     private var sessionProperties = [String: Any]()
     
+    private var defaultEventProperties: [String: Any] = [
+        "locale": Locale.current.identifier,
+        "device": modelIdentifier(),
+        "os_version": UIDevice.current.systemVersion
+    ]
+    
     public func setup(withUrl url: String, userJourneyEnabled: Bool = false) {
         apiUrl = "\(url)/app-analytics-api"
         if UserDefaults.standard.string(forKey: "uuid") == nil {
@@ -34,13 +40,19 @@ public class AnalyticsService {
     }
     
     /// Triggers an event for the metric of the given String.
-    public func trigger(event: String) {
+    public func trigger(event: String, properties: [String: Any] = [String: Any]()) {
         guard let apiUrl = apiUrl, let url = URL(string: "\(apiUrl)/events") else { return }
         var request = URLRequest(url: url)
         let uuid = UserDefaults.standard.string(forKey: "uuid")!
-        let json = [
+        
+        let _properties = defaultEventProperties.merging(properties) { (i1, i2) -> Any in
+            return i2
+        }
+        
+        let json: [String: Any] = [
             "device_id": uuid,
-            "metric_name": event
+            "metric_name": event,
+            "properties": _properties
         ]
         
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
@@ -83,6 +95,13 @@ public class AnalyticsService {
         sessionProperties = [String: Any]()
     }
     
+    /// Adds the given properties to the session.
+    public func addDefaultEventProperties(properties: [String: Any]) {
+        defaultEventProperties = defaultEventProperties.merging(properties) { (i1, i2) -> Any in
+            return i2
+        }
+    }
+    
     private func addToUserJourney(event: String) {
         guard userJourneyEnabled, let userJourney = userJourney else { return }
         let formatter = DateFormatter()
@@ -121,4 +140,13 @@ public class AnalyticsService {
         }.resume()
     }
     
+}
+
+fileprivate func modelIdentifier() -> String {
+    if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
+        return simulatorModelIdentifier
+    }
+    var sysinfo = utsname()
+    uname(&sysinfo)
+    return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
 }
