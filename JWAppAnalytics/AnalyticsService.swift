@@ -18,6 +18,8 @@ public class AnalyticsService {
     
     private var userJourney: UserJourney?
     
+    private var sessionProperties = [String: Any]()
+    
     public func setup(withUrl url: String, userJourneyEnabled: Bool = false) {
         apiUrl = "\(url)/app-analytics-api"
         if UserDefaults.standard.string(forKey: "uuid") == nil {
@@ -59,6 +61,7 @@ public class AnalyticsService {
     
     public func willEnterForeground() {
         userJourney?.events = [[String: Any]]()
+        sessionProperties = [String: Any]()
         trigger(event: "open_app")
     }
     
@@ -66,6 +69,18 @@ public class AnalyticsService {
         guard let userJourney = userJourney else { return }
         addToUserJourney(event: "close_app")
         send(userJourney: userJourney)
+    }
+    
+    /// Adds the given properties to the session.
+    public func addSessionProperties(properties: [String: Any]) {
+        sessionProperties = sessionProperties.merging(properties) { (i1, i2) -> Any in
+            return i2
+        }
+    }
+    
+    /// Clears the session properties.
+    public func clearSessionProperties() {
+        sessionProperties = [String: Any]()
     }
     
     private func addToUserJourney(event: String) {
@@ -82,11 +97,11 @@ public class AnalyticsService {
     private func send(userJourney: UserJourney) {
         guard let apiUrl = apiUrl, let url = URL(string: "\(apiUrl)/app-session") else { return }
         var request = URLRequest(url: url)
-        let uuid = UserDefaults.standard.string(forKey: "uuid")!
 
         let json: [String: Any] = [
             "device_id": userJourney.uuid,
-            "events": userJourney.events
+            "events": userJourney.events,
+            "properties": sessionProperties
         ]
         
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
@@ -100,7 +115,7 @@ public class AnalyticsService {
                 print("Error sending analytics.")
                 return
             }
-            if let res = response as? HTTPURLResponse {
+            if let _ = response as? HTTPURLResponse {
                 // Handle either deleting the json or saving it to disk based on statuscode.
             }
         }.resume()
