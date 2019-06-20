@@ -3,7 +3,7 @@ Pod::Spec.new do |spec|
   # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
   spec.name         = "JWAppAnalytics"
-  spec.version      = "0.2.2"
+  spec.version      = "0.2.3"
   spec.summary      = "Part of a package of plugins that allows for self-hosted app analytics."
   spec.description  = "This package links up with your own backend. Then, provided you use one of the backend implementations of this package, you can start registering events you want to track."
 
