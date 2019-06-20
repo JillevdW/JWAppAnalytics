@@ -20,11 +20,13 @@ public class AnalyticsService {
     
     private var sessionProperties = [String: Any]()
     
-    private var defaultEventProperties: [String: Any] = [
+    private var defaultProperties: [String: Any] = [
         "locale": Locale.current.identifier,
         "device": modelIdentifier(),
         "os_version": UIDevice.current.systemVersion
     ]
+    
+    private var eventProperties = [String: Any]()
     
     public func setup(withUrl url: String, userJourneyEnabled: Bool = false) {
         apiUrl = "\(url)/app-analytics-api"
@@ -37,6 +39,8 @@ public class AnalyticsService {
                 userJourney = UserJourney(uuid: uuid, events: [[String: Any]]())
             }
         }
+        eventProperties = defaultProperties
+        sessionProperties = defaultProperties
     }
     
     /// Triggers an event for the metric of the given String.
@@ -45,7 +49,7 @@ public class AnalyticsService {
         var request = URLRequest(url: url)
         let uuid = UserDefaults.standard.string(forKey: "uuid")!
         
-        let _properties = defaultEventProperties.merging(properties) { (i1, i2) -> Any in
+        let _properties = eventProperties.merging(properties) { (i1, i2) -> Any in
             return i2
         }
         
@@ -73,7 +77,7 @@ public class AnalyticsService {
     
     public func willEnterForeground() {
         userJourney?.events = [[String: Any]]()
-        sessionProperties = [String: Any]()
+        clearSessionProperties()
         trigger(event: "open_app")
     }
     
@@ -92,12 +96,12 @@ public class AnalyticsService {
     
     /// Clears the session properties.
     public func clearSessionProperties() {
-        sessionProperties = [String: Any]()
+        sessionProperties = defaultProperties
     }
     
     /// Adds the given properties to the session.
     public func addDefaultEventProperties(properties: [String: Any]) {
-        defaultEventProperties = defaultEventProperties.merging(properties) { (i1, i2) -> Any in
+        eventProperties = eventProperties.merging(properties) { (i1, i2) -> Any in
             return i2
         }
     }
