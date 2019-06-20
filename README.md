@@ -44,3 +44,42 @@ func applicationWillEnterForeground(_ application: UIApplication) {
     // other code
 }
 ```
+
+
+
+## Properties
+
+Sometimes you want to send some other data to your backend, like whether the user has a subscription or not. This library allows for that through adding so called _properties_ to your session or your events.
+
+
+
+##### Event properties
+
+To add properties to your events you simply add the properties parameter when you trigger them:
+
+```swift
+AnalyticsService.shared.trigger(event: "logged_in", properties: [
+  	"subscribed": false,
+  	"username": username
+])
+```
+
+Whenever you choose to send additional properties with an event, the library will automatically add some other information, like the locale, the device model and the iOS version.
+
+
+
+##### Session properties
+
+Adding properties to your session can be achieved by calling the `addSessionProperties` function. If you want to add some properties every session, make sure to call it in `applicationWillEnterForeground`, **AFTER** calling the `willEnterForeground` function:
+
+```swift
+func applicationWillEnterForeground(_ application: UIApplication) {
+    AnalyticsService.shared.willEnterForeground()
+  	AnalyticsService.shared.addSessionProperties(properties: [
+    		"app_version": appVersion,
+      	"username": username
+  	])
+}
+```
+
+You can add session properties at any moment in your app lifecycle by calling the `addSessionProperties` function, but remember that they will be reset when the app relaunches/reopens.
