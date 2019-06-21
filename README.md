@@ -59,8 +59,8 @@ To add properties to your events you simply add the properties parameter when yo
 
 ```swift
 AnalyticsService.shared.trigger(event: "logged_in", properties: [
-  	"subscribed": false,
-  	"username": username
+    "subscribed": false,
+    "username": username
 ])
 ```
 
@@ -75,10 +75,10 @@ Adding properties to your session can be achieved by calling the `addSessionProp
 ```swift
 func applicationWillEnterForeground(_ application: UIApplication) {
     AnalyticsService.shared.willEnterForeground()
-  	AnalyticsService.shared.addSessionProperties(properties: [
-    		"app_version": appVersion,
-      	"username": username
-  	])
+    AnalyticsService.shared.addSessionProperties(properties: [
+        "app_version": appVersion,
+        "username": username
+    ])
 }
 ```
 
